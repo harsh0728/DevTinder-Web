@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
 import { apiFetch } from "../api/apiFetch";
 import { ChevronLeft, Loader } from "lucide-react";
+import { useDispatch,useSelector } from "react-redux";
+import { addUser } from "../utils/userSlice";
 
 
-export default function EditProfilePage({ user, setUser, setPage }) {
+export default function EditProfilePage({ setPage }) {
+  const user=useSelector((store)=>store.user);
+  const dispatch=useDispatch();
+
   const [form, setForm] = useState({
     about: user.about || '',
-    skills: user.skills?.join(', ') || '',
+    skills: user.skills?.join(', ') || '',  
   });
   const [loading, setLoading] = useState(false);
 
@@ -26,11 +31,11 @@ export default function EditProfilePage({ user, setUser, setPage }) {
         }),
       });
       if (res.success) {
-        setUser(res.data);
+        dispatch(addUser(res.data));
         setPage('profile');
       }
-    } catch {
-      alert('Failed to update profile');
+    } catch (err){
+      console.error(err);
     } finally {
       setLoading(false);
     }

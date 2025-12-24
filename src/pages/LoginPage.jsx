@@ -2,15 +2,19 @@ import { AlertCircle, Eye, EyeOff, Loader } from "lucide-react";
 
 import { useState } from "react";
 import { apiFetch } from "../api/apiFetch";
+import { addUser } from "../utils/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 
-
-export default function LoginPage({ setPage, setUser }) {
+export default function LoginPage({ setPage }) {
   const [email, setEmail] = useState('yuzi@gmail.com');
   const [password, setPassword] = useState('Abcd@1234');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const dispatch=useDispatch();
+  const user=useSelector((store)=>store.user);
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -22,7 +26,8 @@ export default function LoginPage({ setPage, setUser }) {
         body: JSON.stringify({ email, password }),
       });
       if (res.success) {
-        setUser(res.data);
+        //setUser(res.data);
+        dispatch(addUser(res.data));
         setPage('feed');
       } else {
         setError(res.message || 'Login failed');

@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { apiFetch } from "../api/apiFetch";
 import { Loader, Users } from "lucide-react";
+import { useDispatch,useSelector } from "react-redux";
+import { addConnection } from "../utils/connectionSlice";
 
 
 
 export default function ConnectionsPage({ setPage }) {
-  const [connections, setConnections] = useState([]);
   const [loading, setLoading] = useState(true);
+  const dispatch=useDispatch();
+  const connections=useSelector((store)=>store.connection);
 
   useEffect(() => {
     fetchConnections();
@@ -16,7 +19,7 @@ export default function ConnectionsPage({ setPage }) {
     try {
       const res = await apiFetch('/user/connections');
       if (res.success) {
-        setConnections(res.data);
+        dispatch(addConnection(res.data));
       }
     } catch {
       alert('Failed to load connections');

@@ -1,21 +1,30 @@
 import { useEffect, useState } from "react";
 import { apiFetch } from "../api/apiFetch";
 import { Heart, Loader, X } from "lucide-react";
+import { useDispatch,useSelector } from "react-redux";
+import { setFeed,removeUserFromFeed } from "../utils/feedSlice";
 
 export default function FeedPage({ setPage }) {
-  const [feed, setFeed] = useState([]);
   const [current, setCurrent] = useState(0);
   const [loading, setLoading] = useState(true);
+  const feed=useSelector((store)=>store.feed);
+  const dispatch=useDispatch();
 
   useEffect(() => {
     fetchFeed();
   }, []);
 
+
   const fetchFeed = async () => {
+    if (feed.length > 0) {
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await apiFetch('/feed');
       if (res.success) {
-        setFeed(res.data);
+        dispatch(setFeed(res?.data));
         setCurrent(0);
       }
     } catch {
@@ -33,38 +42,13 @@ export default function FeedPage({ setPage }) {
         body: JSON.stringify({ status }),
       });
       setCurrent(current + 1);
-    } catch {
-      alert('Action failed');
+      dispatch(removeUserFromFeed(feed[current]._id));
+    } catch(err) {
+      console.error(err);
     }
   };
 
-//     const handleAction = async (status) => {
-//   if (current >= feed.length) return;
-
-//   try {
-//     const res = await apiFetch(
-//       `/request/send/${feed[current]._id}`,
-//       {
-//         method: 'POST',
-//         body: JSON.stringify({ status }),
-//       }
-//     );
-
-//     if (res.success) {
-//       setCurrent((prev) => prev + 1);
-//     } else if (res.statusCode === 409) {
-//       // Already handled user → just move ahead
-//       setCurrent((prev) => prev + 1);
-//     } else {
-//       alert(res.message || 'Action failed');
-//     }
-
-//   } catch (err) {
-//     console.error(err);
-//     alert('Network error');
-//   }
-// };
-
+  if (!feed) return;
 
   if (loading) {
     return <div className="flex justify-center items-center h-96"><Loader className="animate-spin text-indigo-400" size={48} /></div>;
@@ -82,7 +66,7 @@ export default function FeedPage({ setPage }) {
 
   const dev = feed[current];
 
-  return (
+  return feed && (
     <div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)]">
       <div className="w-full max-w-md">
         <div className="mb-4 text-center text-slate-400 text-sm font-medium">

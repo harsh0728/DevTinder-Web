@@ -3,12 +3,18 @@
 import { Home, Users, MessageCircle, User, LogOut } from 'lucide-react';
 import NavButton from './NavButton';
 import { apiFetch } from '../api/apiFetch';
+import { removeUser } from '../utils/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
-export default function Navbar({ user, setPage, setUser }) {
+export default function Navbar({ setPage }) {
+  const dispatch = useDispatch();
+  const user=useSelector((store) => store.user);
+
   const handleLogout = async () => {
     try {
       await apiFetch('/auth/logout', { method: 'POST' });
-      setUser(null);
+      //setUser(null);
+      dispatch(removeUser());
       setPage('login');
     } catch {
       alert('Logout failed');

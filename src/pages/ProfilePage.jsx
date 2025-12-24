@@ -1,9 +1,14 @@
 import { Edit2 } from "lucide-react";
 import ProfileField from "../components/ProfileField";
+import { useSelector,useDispatch } from "react-redux";
 
 
 
-export default function ProfilePage({ user, setPage }) {
+export default function ProfilePage({setPage }) {
+  const user=useSelector((store)=>store.user);
+  const dispatch=useDispatch();
+
+
   if (!user) return <div className="text-center text-slate-300">Loading...</div>;
 
   return (

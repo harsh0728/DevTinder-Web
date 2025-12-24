@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { apiFetch } from "../api/apiFetch";
 import { Check, Loader, MessageCircle, X } from "lucide-react";
+import { useDispatch,useSelector } from "react-redux";
+import { addRequests, removeRequest } from "../utils/requestSlice";
 
 
 export default function RequestsPage({ setPage }) {
-  const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
+  const dispatch=useDispatch();
+  const requests=useSelector((store)=>store.requests);
 
   useEffect(() => {
     fetchRequests();
@@ -15,7 +18,7 @@ export default function RequestsPage({ setPage }) {
     try {
       const res = await apiFetch('/user/request/received');
       if (res.success) {
-        setRequests(res.data);
+        dispatch(addRequests(res.data));
       }
     } catch {
       alert('Failed to load requests');
@@ -30,7 +33,7 @@ export default function RequestsPage({ setPage }) {
         method: 'POST',
         body: JSON.stringify({ status }),
       });
-      setRequests(requests.filter((r) => r._id !== requestId));
+      dispatch(removeRequest(requestId));
     } catch {
       alert('Failed to review request');
     }
@@ -39,6 +42,12 @@ export default function RequestsPage({ setPage }) {
   if (loading) {
     return <div className="flex justify-center items-center h-96"><Loader className="animate-spin text-indigo-400" size={48} /></div>;
   }
+
+  if (!requests) return;
+
+
+  // if (requests.length === 0)
+  //   return <h1 className="flex justify-center my-10"> No Requests Found</h1>;
 
   return (
     <div className="max-w-2xl mx-auto py-8">
