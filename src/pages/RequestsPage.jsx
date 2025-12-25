@@ -46,9 +46,6 @@ export default function RequestsPage({ setPage }) {
   if (!requests) return;
 
 
-  // if (requests.length === 0)
-  //   return <h1 className="flex justify-center my-10"> No Requests Found</h1>;
-
   return (
     <div className="max-w-2xl mx-auto py-8">
       <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400 mb-8">Connection Requests</h1>
