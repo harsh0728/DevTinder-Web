@@ -1,12 +1,14 @@
 import { Edit2 } from "lucide-react";
 import ProfileField from "../components/ProfileField";
 import { useSelector,useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 
 
-export default function ProfilePage({setPage }) {
+export default function ProfilePage() {
   const user=useSelector((store)=>store.user);
   const dispatch=useDispatch();
+  const navigate=useNavigate();
 
 
   if (!user) return <div className="text-center text-slate-300">Loading...</div>;
@@ -16,7 +18,7 @@ export default function ProfilePage({setPage }) {
       <div className="bg-slate-900/50 backdrop-blur-xl border border-indigo-500/20 rounded-2xl p-8">
         <div className="flex items-start justify-between mb-8">
           <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">My Profile</h1>
-          <button onClick={() => setPage('profile/edit')} className="flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600/20 hover:bg-indigo-600/40 text-indigo-400 hover:text-indigo-300 transition duration-200 font-medium">
+          <button onClick={() => navigate('/profile/edit')} className="flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600/20 hover:bg-indigo-600/40 text-indigo-400 hover:text-indigo-300 transition duration-200 font-medium">
             <Edit2 size={18} />
             Edit
           </button>

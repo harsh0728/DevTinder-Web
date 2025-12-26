@@ -4,9 +4,9 @@ import { useState } from "react";
 import { apiFetch } from "../api/apiFetch";
 import { addUser } from "../utils/userSlice";
 import { useDispatch, useSelector } from "react-redux";
+import {useNavigate} from "react-router-dom";
 
-
-export default function LoginPage({ setPage }) {
+export default function LoginPage() {
   const [email, setEmail] = useState('yuzi@gmail.com');
   const [password, setPassword] = useState('Abcd@1234');
   const [showPassword, setShowPassword] = useState(false);
@@ -14,7 +14,7 @@ export default function LoginPage({ setPage }) {
   const [error, setError] = useState('');
   const dispatch=useDispatch();
   const user=useSelector((store)=>store.user);
-
+  const navigate=useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -28,7 +28,7 @@ export default function LoginPage({ setPage }) {
       if (res.success) {
         //setUser(res.data);
         dispatch(addUser(res.data));
-        setPage('feed');
+        navigate('/feed');
       } else {
         setError(res.message || 'Login failed');
       }
@@ -108,7 +108,7 @@ export default function LoginPage({ setPage }) {
           </div>
 
           <button
-            onClick={() => setPage('signup')}
+            onClick={() => navigate('/signup')}
             className="w-full py-3 rounded-lg border border-cyan-500/30 hover:border-cyan-500/60 text-cyan-400 font-semibold transition duration-200"
           >
             Create New Account

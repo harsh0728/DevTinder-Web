@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { apiFetch } from "../api/apiFetch";
-import { Loader, Users } from "lucide-react";
+import {Loader, Users } from "lucide-react";
 import { useDispatch,useSelector } from "react-redux";
 import { addConnection } from "../utils/connectionSlice";
+import {Link} from "react-router-dom";
 
 
-
-export default function ConnectionsPage({ setPage }) {
+export default function ConnectionsPage() {
   const [loading, setLoading] = useState(true);
   const dispatch=useDispatch();
   const connections=useSelector((store)=>store.connection);
@@ -45,7 +45,7 @@ export default function ConnectionsPage({ setPage }) {
           <p className="text-lg">No connections yet. Start swiping to connect!</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
           {connections.map((conn) => (
             <div key={conn._id} className="bg-slate-900/50 backdrop-blur-xl border border-indigo-500/20 rounded-xl overflow-hidden hover:border-indigo-500/40 transition duration-200 group cursor-pointer">
               <div className="h-40 bg-gradient-to-br from-indigo-600 to-cyan-600 flex items-center justify-center text-6xl overflow-hidden">
@@ -63,6 +63,16 @@ export default function ConnectionsPage({ setPage }) {
                     {conn.skills.length > 3 && <span className="px-2 py-1 rounded-full bg-slate-700/50 text-slate-400 text-xs font-medium">+{conn.skills.length - 3}</span>}
                   </div>
                 )}
+                {conn.about && (
+                    <div className="text-white py-2 ">{conn.about}</div>
+                  )} 
+                  <Link to={"/chat/"+`${conn._id}`}>
+                    <button className="flex-1 px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-600/50 to-cyan-600/50 border border-indigo-500/40 hover:from-indigo-500/70 hover:to-cyan-500/70 text-cyan-300 hover:text-cyan-200 font-medium transition duration-200 flex items-center justify-center gap-2">
+                      Chat
+                    </button>
+                  </Link>
+                  
+                  
               </div>
             </div>
           ))}

@@ -5,7 +5,7 @@ import { useDispatch,useSelector } from "react-redux";
 import { addRequests, removeRequest } from "../utils/requestSlice";
 
 
-export default function RequestsPage({ setPage }) {
+export default function RequestsPage() {
   const [loading, setLoading] = useState(true);
   const dispatch=useDispatch();
   const requests=useSelector((store)=>store.requests);

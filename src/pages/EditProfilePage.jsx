@@ -3,15 +3,27 @@ import { apiFetch } from "../api/apiFetch";
 import { ChevronLeft, Loader } from "lucide-react";
 import { useDispatch,useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
+import { useNavigate } from "react-router-dom";
 
 
-export default function EditProfilePage({ setPage }) {
+export default function EditProfilePage() {
   const user=useSelector((store)=>store.user);
   const dispatch=useDispatch();
+  const navigate=useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      setForm({
+        about: user.about || '',
+        skills: user.skills?.join(', ') || '',
+      });
+    }
+  }, [user]);
+
 
   const [form, setForm] = useState({
-    about: user.about || '',
-    skills: user.skills?.join(', ') || '',  
+    about: user?.about || '' ,
+    skills: user?.skills?.join(', ') || '',  
   });
   const [loading, setLoading] = useState(false);
 
@@ -32,7 +44,7 @@ export default function EditProfilePage({ setPage }) {
       });
       if (res.success) {
         dispatch(addUser(res.data));
-        setPage('profile');
+        navigate('/profile');
       }
     } catch (err){
       console.error(err);
@@ -45,7 +57,7 @@ export default function EditProfilePage({ setPage }) {
     <div className="max-w-2xl mx-auto py-8">
       <div className="bg-slate-900/50 backdrop-blur-xl border border-indigo-500/20 rounded-2xl p-8">
         <div className="flex items-center gap-4 mb-8">
-          <button onClick={() => setPage('profile')} className="p-2 hover:bg-indigo-500/20 rounded-lg transition">
+          <button onClick={() => navigate('/profile')} className="p-2 hover:bg-indigo-500/20 rounded-lg transition">
             <ChevronLeft size={24} className="text-slate-300" />
           </button>
           <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">Edit Profile</h1>
@@ -78,7 +90,7 @@ export default function EditProfilePage({ setPage }) {
 
           <div className="flex gap-3 pt-4">
             <button
-              onClick={() => setPage('profile')}
+              onClick={() => navigate('/profile')}
               className="flex-1 px-6 py-3 rounded-lg border border-slate-600 hover:border-slate-500 text-slate-300 hover:text-white font-medium transition duration-200"
             >
               Cancel

@@ -5,17 +5,18 @@ import NavButton from './NavButton';
 import { apiFetch } from '../api/apiFetch';
 import { removeUser } from '../utils/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-export default function Navbar({ setPage }) {
+export default function Navbar() {
   const dispatch = useDispatch();
   const user=useSelector((store) => store.user);
+  const navigate=useNavigate();
 
   const handleLogout = async () => {
     try {
       await apiFetch('/auth/logout', { method: 'POST' });
-      //setUser(null);
       dispatch(removeUser());
-      setPage('login');
+      navigate('/login');
     } catch {
       alert('Logout failed');
     }
@@ -25,16 +26,17 @@ export default function Navbar({ setPage }) {
     <nav className="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-xl border-b border-indigo-500/20">
       <div className="max-w-6xl mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <button onClick={() => setPage('feed')} className="flex items-center gap-2 text-2xl font-bold">
+          <button onClick={() => navigate('/feed')} className="flex items-center gap-2 text-2xl font-bold">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">💜</span>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">DevTinder</span>
           </button>
 
           <div className="hidden md:flex items-center gap-2">
-            <NavButton icon={Home} label="Feed" onClick={() => setPage('feed')} />
-            <NavButton icon={MessageCircle} label="Requests" onClick={() => setPage('requests')} />
-            <NavButton icon={Users} label="Connections" onClick={() => setPage('connections')} />
-            <NavButton icon={User} label="Profile" onClick={() => setPage('profile')} />
+            <NavButton icon={Home} label="Feed" onClick={() => navigate('feed')} />
+            <NavButton icon={MessageCircle} label="Requests" onClick={() => navigate('requests')} />
+            <NavButton icon={Users} label="Connections" onClick={() => navigate('connections')} />
+            <NavButton icon={Users} label="Premium" onClick={() => navigate('premium')} />
+            <NavButton icon={User} label="Profile" onClick={() => navigate('profile')} />
           </div>
 
           <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-400 transition duration-200">

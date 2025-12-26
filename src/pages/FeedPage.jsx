@@ -4,7 +4,7 @@ import { Heart, Loader, X } from "lucide-react";
 import { useDispatch,useSelector } from "react-redux";
 import { setFeed,removeUserFromFeed } from "../utils/feedSlice";
 
-export default function FeedPage({ setPage }) {
+export default function FeedPage() {
   const [current, setCurrent] = useState(0);
   const [loading, setLoading] = useState(true);
   const feed=useSelector((store)=>store.feed);

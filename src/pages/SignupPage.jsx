@@ -1,14 +1,16 @@
 import { ChevronLeft, Eye, EyeOff, Loader, AlertCircle } from "lucide-react";
 import { useState } from "react";
 import { apiFetch } from "../api/apiFetch";
+import { useNavigate } from "react-router-dom";
 
 
-export default function SignupPage({ setPage }) {
+export default function SignupPage() {
   const [form, setForm] = useState({ firstName: '', lastName: '', email: '', password: '', age: '', gender: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [validation, setValidation] = useState({});
+  const navigate=useNavigate();
 
   const validateForm = () => {
     const errors = {};
@@ -42,7 +44,7 @@ export default function SignupPage({ setPage }) {
       });
       if (res.success) {
         alert('Account created! Please login.');
-        setPage('login');
+        navigate('/login');
       } else {
         setError(res.message || 'Signup failed');
       }
@@ -58,7 +60,7 @@ export default function SignupPage({ setPage }) {
       <div className="w-full max-w-md">
         <div className="bg-slate-900/50 backdrop-blur-xl border border-indigo-500/20 rounded-2xl p-8">
           <div className="flex items-center gap-4 mb-8">
-            <button onClick={() => setPage('login')} className="p-2 hover:bg-indigo-500/20 rounded-lg transition">
+            <button onClick={() => navigate('login')} className="p-2 hover:bg-indigo-500/20 rounded-lg transition">
               <ChevronLeft size={24} className="text-slate-300" />
             </button>
             <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">Create Account</h1>
