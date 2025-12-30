@@ -1,111 +1,109 @@
-// import { useEffect } from "react";
-// import { io } from "socket.io-client";
-// import { apiFetch } from "../api/apiFetch";
-// import { useParams } from "react-router";
-
-
-// const socket = io("http://localhost:3000", {
-// });
-
-// const Chat=()=> {
-//     const {userId}=useParams();
-
-//   useEffect(() => {
-//     socket.on("connect", () => {
-//       console.log("Connected from frontend:", socket.id);
-//     });
-
-//     return () => {
-//       socket.disconnect();
-//     };
-//   }, []);
-
-//   const handleSubmit=(e)=>{
-//     e.preventDefault();
-//     const messageInput = e.target.querySelector('input[type="text"]');
-//     const message = messageInput.value;
-//     socket.emit("chat message", {userId, message});
-//     messageInput.value = '';
-//   }
-
-//   return <div className="text-white">
-//     Chat with {userId}
-//     <div className="">
-//         {/* Chat messages will be displayed here */}
-//         <div className="chat-messages"></div>
-
-//         {/* Input field to send new messages */}
-//         <form onSubmit={handleSubmit} className="chat-input">
-//             <input type="text" placeholder="Type your message..." className="input input-bordered w-full max-w-xs text-black" />
-//             <button className="btn btn-primary ml-2">Send</button>
-//         </form>
-//     </div>
-//   </div>;
-// }
-
-// export default Chat;
-
 import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
 import { useParams } from "react-router";
-
-const socket = io("http://localhost:3000",{});
+import { socketConnection } from "../config/socket";
+import { useSelector } from "react-redux";
+import { apiFetch } from "../api/apiFetch";
 
 const Chat = () => {
-  const { userId } = useParams();
+  const socket = socketConnection;
+  const { targetUserId } = useParams();
+  const user = useSelector((store) => store.user);
+  const userId = user?._id;
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    socket.on("connect", () => {
-      console.log("Connected from frontend:", socket.id);
+    if (!userId || !targetUserId) return;
+    getPreviousChats();
+
+    socket.emit("join-room", {
+      firstName: user.firstName,
+      userId,
+      targetUserId,
     });
 
-    // Listen for incoming messages
-    socket.on("chat message", (data) => {
-      setMessages((prev) => [...prev, data]); // Add new message to state
+    socket.on("receive-message", (data) => {
+      setMessages((prev) => [...prev, data]);
     });
 
     return () => {
-      socket.disconnect();
-    };
-  }, []);
+    socket.off("receive-message");
+  };
+  }, [userId, targetUserId]);
+
+  const getPreviousChats=async()=>{
+    try {
+      const chats=await apiFetch("/chat/"+`${targetUserId}`);
+
+      const formattedChat=chats.map((chat)=>({
+        userId:chat.senderId._id,
+        firstName:chat.senderId.firstName,
+        message:chat.text,
+      }));
+      
+      setMessages(formattedChat);
+    } catch (error) {
+      console.error("Failed to load previous chats", error);
+    }
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const messageInput = e.target.querySelector('input[type="text"]');
-    const message = messageInput.value.trim();
+    const input = e.target.elements[0];
+    const message = input.value.trim();
     if (!message) return;
 
-    // Emit message to server
-    socket.emit("chat message", { userId, message });
+    socket.emit("send-message", {
+      firstName: user.firstName,
+      userId,
+      targetUserId,
+      message,
+    });
 
-    // Also update locally
-    setMessages((prev) => [...prev, { userId: "me", message }]);
-    messageInput.value = "";
+    input.value = "";
   };
 
   return (
     <div className="text-white">
-      <h2>Chat with {userId}</h2>
-
-      <div className="chat-messages border p-4 h-64 overflow-y-auto mb-4">
-        {messages.map((msg, index) => (
+      {/* <div className="chat-messages border p-4 h-64 overflow-y-auto mb-4">
+        {messages?.map((msg, index) => (
           <div
             key={index}
-            className={`py-1 px-2 my-1 rounded ${
-              msg.userId === "me" ? "bg-blue-500 self-end" : "bg-gray-700"
+            className={`py-1 px-2 my-1 rounded  ${
+              msg.userId === userId ? "bg-blue-500 text-right w-1/3 " : "bg-gray-700"
             }`}
           >
-            <strong>{msg.userId === "me" ? "You" : msg.userId}:</strong> {msg.message}
+            <strong>{msg.userId === userId ? "You" : msg.firstName}:</strong>{" "}
+            {msg.message}
           </div>
         ))}
+      </div> */}
+      <div className="chat-messages border p-4 h-64 overflow-y-auto mb-4 space-y-2">
+        {messages?.map((msg, index) => {
+          const isMe = msg.userId === userId;
+
+          return (
+            <div
+              key={index}
+              className={`flex ${isMe ? "justify-end" : "justify-start"}`}
+            >
+              <div className={`px-3 py-2 rounded-3xl max-w-[60%] ${
+                  isMe ? "bg-blue-500 text-white" : "bg-gray-700 text-white"
+                }`}>
+                {/* <strong className="block text-xs opacity-80">
+                  {isMe ? "You" : msg.firstName}
+                </strong> */}
+                <span>{msg.message}</span>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
-      <form onSubmit={handleSubmit} className="chat-input flex">
+      <form onSubmit={handleSubmit} className="flex">
         <input
           type="text"
-          placeholder="Type your message..."
-          className="input input-bordered w-full max-w-xs text-black"
+          className="input input-bordered w-full text-black"
+          placeholder="Type..."
         />
         <button className="btn btn-primary ml-2">Send</button>
       </form>

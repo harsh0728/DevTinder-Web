@@ -113,11 +113,11 @@ export default function App() {
       const res = await apiFetch('/profile/view');
       if (res.success) {
         dispatch(addUser(res.data));
-        navigate('feed');
+        navigate('/feed');
       }
     } catch (err) {
       dispatch(removeUser());
-      navigate('login');
+      navigate('/login');
       console.error(err);
     }
   };
@@ -136,7 +136,7 @@ export default function App() {
           <Route path="/requests" element={<RequestsPage />} />
           <Route path="/connections" element={<ConnectionsPage />} />
           <Route path="/premium" element={<Premium />} />
-          <Route path="/chat/:userId" element={<Chat />} />
+          <Route path="/chat/:targetUserId" element={<Chat />} />
 
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>

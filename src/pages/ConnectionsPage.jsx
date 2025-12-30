@@ -36,17 +36,17 @@ export default function ConnectionsPage() {
     <div className="max-w-6xl mx-auto py-8">
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400 mb-2">Your Connections</h1>
-        <p className="text-slate-400">{connections.length} developer{connections.length !== 1 ? 's' : ''} connected</p>
+        <p className="text-slate-400">{connections?.length} developer{connections.length !== 1 ? 's' : ''} connected</p>
       </div>
 
-      {connections.length === 0 ? (
+      {connections?.length === 0 ? (
         <div className="text-center py-16 text-slate-400">
           <Users size={48} className="mx-auto mb-4 opacity-30" />
           <p className="text-lg">No connections yet. Start swiping to connect!</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
-          {connections.map((conn) => (
+          {connections?.map((conn) => (
             <div key={conn._id} className="bg-slate-900/50 backdrop-blur-xl border border-indigo-500/20 rounded-xl overflow-hidden hover:border-indigo-500/40 transition duration-200 group cursor-pointer">
               <div className="h-40 bg-gradient-to-br from-indigo-600 to-cyan-600 flex items-center justify-center text-6xl overflow-hidden">
                 {conn.photoUrl ? <img src={conn.photoUrl} alt="" className="w-full h-full object-cover group-hover:scale-110 transition duration-300" /> : '👤'}
@@ -71,8 +71,6 @@ export default function ConnectionsPage() {
                       Chat
                     </button>
                   </Link>
-                  
-                  
               </div>
             </div>
           ))}
