@@ -9,7 +9,7 @@ const Premium = () => {
   },[])
 
   const verifyPremiumUser=async()=>{
-    const res=await apiFetch("/premium/verify");
+    const res=await apiFetch("/payment/premium/verify");
 
     if (res.data?.isPremium) {
       setIsUserPremium(true);
