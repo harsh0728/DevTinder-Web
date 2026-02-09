@@ -125,6 +125,15 @@ export default function SignupPage() {
             <button onClick={handleSignup} disabled={loading} className="w-full py-3 rounded-lg bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white font-semibold transition duration-200 disabled:opacity-50 flex items-center justify-center gap-2">
               {loading ? <Loader className="animate-spin" size={20} /> : 'Create Account'}
             </button>
+            <div className="text-center mt-4 text-slate-300">
+              <span className="text-sm">Already have an account? </span>
+              <button
+                onClick={() => navigate('/login')}
+                className="text-indigo-400 font-semibold hover:text-indigo-300 transition underline underline-offset-2"
+              >
+              Login
+              </button>
+            </div>
           </div>
         </div>
       </div>

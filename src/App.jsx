@@ -95,6 +95,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addUser, removeUser } from './utils/userSlice';
 import Premium from './pages/Premium';
 import Chat from './pages/Chat';
+import OAuthSuccess from "./pages/oauth-success";
 
 
 export default function App() {
@@ -137,6 +138,7 @@ export default function App() {
           <Route path="/connections" element={<ConnectionsPage />} />
           <Route path="/premium" element={<Premium />} />
           <Route path="/chat/:targetUserId" element={<Chat />} />
+          <Route path="/oauth-success" element={<OAuthSuccess />} />
 
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
