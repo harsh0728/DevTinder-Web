@@ -9,14 +9,12 @@ export default function OAuthSuccess() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get("token");
-
-    if (!token) return navigate("/login");
-
-    // Save token to cookie
-    document.cookie = `token=${token}; path=/;`;
-
+    // const urlParams = new URLSearchParams(window.location.search);
+    // const token = urlParams.get("token");
+    // if (!token) return navigate("/login");
+    // // Save token to cookie
+    // // document.cookie = `token=${token}; path=/;`;
+    // localStorage.setItem("token", token);
     fetchUser();
   }, []);
 

@@ -9,7 +9,7 @@ export default function GoogleLoginButton() {
       onClick={handleLogin}
       className="w-full mt-3 py-2 rounded-lg bg-white text-black font-semibold shadow flex items-center justify-center gap-2"
     >
-      <img src={"../public/google.jpg"} className="w-10 h-10" />
+      <img src={"/google.jpg"} className="w-10 h-10" />
       Continue with Google
     </button>
   );
