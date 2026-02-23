@@ -1119,16 +1119,13 @@ const Chat = () => {
     return date.toLocaleDateString();
   };
 
-  const handleAudioCall = () => {
-  // Navigate to call page for audio call
-    navigate(`/call/${userId}/${targetUserId}?type=audio`);
-  };
+    const handleAudioCall = () => {
+      navigate(`/call/${userId}/${targetUserId}?type=audio&role=caller`);
+    };
 
-  const handleVideoCall = () => {
-    // Navigate to call page for video call  
-    navigate(`/call/${userId}/${targetUserId}?type=video`);
-  };
- 
+    const handleVideoCall = () => {
+      navigate(`/call/${userId}/${targetUserId}?type=video&role=caller`);
+    };
   
   return (
     <div className="h-full w-full relative bg-gradient-to-b from-gray-900 via-gray-900 to-black flex flex-col">
