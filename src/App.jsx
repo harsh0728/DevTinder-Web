@@ -96,6 +96,8 @@ import { addUser, removeUser } from './utils/userSlice';
 import Premium from './pages/Premium';
 import Chat from './pages/Chat';
 import OAuthSuccess from "./pages/oauth-success";
+import CallPage from "./pages/CallPage";
+import Call from "./pages/Call";
 
 
 export default function App() {
@@ -139,7 +141,8 @@ export default function App() {
           <Route path="/premium" element={<Premium />} />
           <Route path="/chat/:targetUserId" element={<Chat />} />
           <Route path="/oauth-success" element={<OAuthSuccess />} />
-
+          <Route path="/call/:userId/:targetUserId" element={<CallPage />} />
+          {/* <Route path="/call" element={<Call />} /> */}
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       </div>
