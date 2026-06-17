@@ -11,7 +11,7 @@ const Premium = () => {
   const verifyPremiumUser=async()=>{
     const res=await apiFetch("/payment/premium/verify");
 
-    if (res.data?.isPremium) {
+    if (res.isPremium) {
       setIsUserPremium(true);
     }
   }
@@ -42,7 +42,10 @@ const Premium = () => {
         theme: {
           color: '#F37254'
         },
-        handler: verifyPremiumUser,
+        handler: async function () {
+          await new Promise(resolve => setTimeout(resolve, 3000));
+          await verifyPremiumUser();
+        },
       };
 
       const rzp = new window.Razorpay(options);
