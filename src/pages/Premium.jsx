@@ -43,7 +43,7 @@ const Premium = () => {
           color: '#F37254'
         },
         handler: async function () {
-          await new Promise(resolve => setTimeout(resolve, 3000));
+          await new Promise(resolve => setTimeout(resolve, 2000));
           await verifyPremiumUser();
         },
       };
@@ -56,7 +56,17 @@ const Premium = () => {
     }
   }
 
-  return IsUserPremium ? "You are already a Premium User" : (
+  return IsUserPremium ? (
+      <div className="flex items-center justify-center h-96">
+        <div className="text-center">
+          <div className="text-6xl mb-4">👑</div>
+          <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">
+            You are already a Premium Member!
+          </h2>
+        </div>
+      </div>
+    )
+    : (
     <>
     <div className="text-white bg-[#131633] m-10">
       <div className="flex w-full">
